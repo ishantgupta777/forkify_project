@@ -2,8 +2,11 @@
 import {Search} from './model/search';
 import {element, renderLoader , clearLoader} from './view/base';
 import {showRecipe ,clearSearchField } from  './view/searchView';
+import Recipe from './model/recipe';
 
 var data = {};
+
+// search object---------------------------------------
 
 async function searchResult(e){
     //preventing from reload
@@ -35,3 +38,35 @@ element.pageButton.addEventListener('click',(e)=>{
    }
 })
 
+
+
+// receipe object ----------------------------------------------
+
+async function recipeControl(){
+
+    let hash = window.location.hash.substring(1);
+
+        // make recipe object
+        data.recipe = new Recipe(hash);
+
+    if(hash){
+        try{
+            //
+            await data.recipe.getRecipe();
+            data.recipe.parseIngredients();
+            data.recipe.getTime();
+            data.recipe.getServings();
+            console.log(data.recipe);
+
+        }catch(err){
+
+            alert('something is wrong');
+
+        }
+    }
+ 
+
+}
+
+window.addEventListener('hashchange',recipeControl);
+window.addEventListener('load',recipeControl);
