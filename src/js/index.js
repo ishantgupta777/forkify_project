@@ -3,6 +3,7 @@ import {Search} from './model/search';
 import {element, renderLoader , clearLoader} from './view/base';
 import {showRecipe ,clearSearchField } from  './view/searchView';
 import Recipe from './model/recipe';
+import {renderRecipe, clearRecipe} from './view/recipeView'
 
 var data = {};
 
@@ -48,19 +49,22 @@ async function recipeControl(){
 
         // make recipe object
         data.recipe = new Recipe(hash);
-
+    
     if(hash){
         try{
             //
+            clearRecipe();
+            renderLoader(element.recipePage);
             await data.recipe.getRecipe();
+            clearLoader();
             data.recipe.parseIngredients();
             data.recipe.getTime();
             data.recipe.getServings();
-            console.log(data.recipe);
+            renderRecipe(data.recipe,true);
 
         }catch(err){
 
-            alert('something is wrong');
+            alert(err);
 
         }
     }
